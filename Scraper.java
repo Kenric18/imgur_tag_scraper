@@ -1,18 +1,22 @@
-import java.io.IOException;
-
-import org.jsoup.Jsoup;
+import org.jsoup.*;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
+import java.io.IOException;
 
 public class Scraper
 {
-	public static void main(String[] args) throws IOException
+	public static void main(String[] args) 
 	{
-		Document doc = Jsoup.connect("http://en.wikipedia.org/").get();
-		Elements newsHeadlines = doc.select("#mp-itn b a");
-		
-		System.out.println(newsHeadlines);
-		
+		try {
+
+			Document doc = Jsoup.connect("http://en.wikipedia.org/").get();
+
+			System.out.println(doc);
+			//Elements e = doc.select("a[href]");
+
+		} catch (IOException e) {
+			System.out.println(e);
+		}
 
 	}
+
 }
