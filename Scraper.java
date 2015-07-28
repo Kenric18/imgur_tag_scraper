@@ -20,7 +20,6 @@ public class Scraper
 		try {
 			this.doc = Jsoup.connect(root + tag).get(); 
 			this.list = doc.select(".image-list-link img[src$=.jpg]");
-			System.out.println("List updated..");
 		} catch (IOException e) {
 			System.out.println(e);
 		}
@@ -29,11 +28,22 @@ public class Scraper
 
 	public void getList()
 	{
-		System.out.println("Printing list..");
+
+		String numberOfImagesSearch = doc.getElementById("searching").text();
+		String[] numberOfImagesSearchList = numberOfImagesSearch.split(" ");
+
+		int numberOfImages = Integer.parseInt(numberOfImagesSearchList[7].substring(0, numberOfImagesSearchList[7].length() - 1));
+		int imagesFound = 0;
+
+		System.out.println(imagesFound);
 
 		for (Element e : list)
 		{
-			System.out.println(e.attr("src").substring(2, e.attr("src").length()));
+			if (imagesFound < numberOfImages) {
+				System.out.println(e.attr("src").substring(2, e.attr("src").length()));
+				imagesFound++;
+
+			}
 		}
 	}
 

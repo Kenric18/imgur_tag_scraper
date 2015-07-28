@@ -6,7 +6,7 @@ public class ScraperFrame
 {
 	public static void main(String[] args)
 	{
-		Scraper s = new Scraper("cat");
+		Scraper s = new Scraper("dog");
 
 		s.getList();
 	}
