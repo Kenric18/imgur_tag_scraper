@@ -17,7 +17,7 @@ public class Scraper
 	public Scraper(String tag)
 	{
 		this.tag = tag;
-		this.root = "http://imgur.com/search/score/all/page/1?scrolled&q=";
+		this.root = "http://imgur.com/search/score/all/page/1154?scrolled&q=";
 		try {
 			this.doc = Jsoup.connect(root + tag).get(); 
 			this.list = doc.select(".image-list-link img[src$=.jpg]");
@@ -34,16 +34,21 @@ public class Scraper
 		String numberOfImagesSearch = doc.getElementById("searching").text();
 		String[] numberOfImagesSearchList = numberOfImagesSearch.split(" ");
 
-		int numberOfImages = Integer.parseInt(numberOfImagesSearchList[7].substring(0, numberOfImagesSearchList[7].length() - 1));
+		int numberOfImagesTotal = Integer.parseInt(numberOfImagesSearchList[7].substring(0, numberOfImagesSearchList[7].length() - 1));
+		int numberOfImagesRemaining = numberOfImagesTotal;
+		int currentImagesFound = Integer.parseInt(numberOfImagesSearchList[5]);
 		int imagesFound = 0;	
 
 		int pageCount = 1;	
 
-		while (numberOfImages > 0) 
+		while (!(currentImagesFound == numberOfImagesTotal)) 
 		{
+			System.out.print("New page ");
+			System.out.println(pageCount);
+	
 			for (Element e : list)
 			{
-				//System.out.println(e.attr("src").substring(2, e.attr("src").length()));
+				System.out.println(e.attr("src").substring(2, e.attr("src").length()));
 				imagesFound++;
 			}
 
@@ -56,14 +61,11 @@ public class Scraper
 
 			numberOfImagesSearch = doc.getElementById("searching").text();
 			numberOfImagesSearchList = numberOfImagesSearch.split(" ");
-
-			System.out.println(root + tag);
-			System.out.println(numberOfImages);
-			System.out.println("Subtracting.." + imagesFound);
-
-			numberOfImages -= imagesFound;
-
+			numberOfImagesRemaining -= imagesFound;
 			imagesFound = 0;
+
+			currentImagesFound = Integer.parseInt(numberOfImagesSearchList[5]);
+			
 
 		}
 
