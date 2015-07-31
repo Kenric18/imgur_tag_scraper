@@ -27,11 +27,10 @@ public class Scraper {
 			System.out.println(e);
 		}
 
-	}
+	}	
+
 
 	public void getList() {
-
-
 
 		String numberOfImagesSearch = doc.getElementById("searching").text();
 		String[] numberOfImagesSearchList = numberOfImagesSearch.split(" ");
