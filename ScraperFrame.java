@@ -16,12 +16,8 @@ public class ScraperFrame extends JFrame implements ActionListener {
 	private JButton downloadButton;
 	private JLabel instruction;
 	private TextField searchQuery;
-	private JProgressBar progressBar;
+	//private JProgressBar progressBar;
 	private Scraper scraperTool;
-
-
-	static final int MINIMUM = 0;
-	static final int MAXIMUM = 100;
 
 
 
@@ -32,7 +28,7 @@ public class ScraperFrame extends JFrame implements ActionListener {
 		downloadButton = new JButton("Download");
 		instruction = new JLabel("Please enter query terms");
 		searchQuery = new TextField(85);
-		progressBar = new JProgressBar();
+		//progressBar = new JProgressBar();
 
 
 		this.setSize(800, 100);
@@ -42,7 +38,7 @@ public class ScraperFrame extends JFrame implements ActionListener {
 		add(instruction, BorderLayout.NORTH);
 		add(searchQuery, BorderLayout.WEST);
 		add(downloadButton, BorderLayout.EAST);
-		add(progressBar, BorderLayout.SOUTH);
+		//add(progressBar, BorderLayout.SOUTH);
 
 		downloadButton.addActionListener(this);
 	} 
@@ -55,10 +51,17 @@ public class ScraperFrame extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == downloadButton) {
 				Scraper scraper = new Scraper(searchQuery.getText());
-
 				JLabel numberOfImages = new JLabel(Integer.toString(scraper.getTotalImages()));
+				JButton stopButton = new JButton("Stop");
+				stopButton.setSize(120, 50);
 
+
+				this.remove(downloadButton);
+				this.add(stopButton, BorderLayout.EAST);
 				this.add(numberOfImages, BorderLayout.NORTH);
+				this.revalidate();
+				this.repaint();
+				//progressBar.setIndeterminate(true);
 
 				//scraper.getList();
 
