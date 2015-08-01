@@ -14,15 +14,27 @@ public class Scraper {
 	private String root;
 	private Document doc;
 	private Elements list;
+	private int numberOfImagesTotal;
 
 
 	public Scraper(String tag) {
+
+
 		this.tag = tag;
 		this.root = "http://imgur.com/search/score/all/page/1?scrolled&q=";
+		this.numberOfImagesTotal = 0;
 
 		try {
 			this.doc = Jsoup.connect(root + tag).get(); 
 			this.list = doc.select(".image-list-link img[src$=.jpg]");
+
+			String numberOfImagesSearch = doc.getElementById("searching").text();
+			String[] numberOfImagesSearchList = numberOfImagesSearch.split(" ");
+
+			this.numberOfImagesTotal = Integer.parseInt(numberOfImagesSearchList[7].substring(0, numberOfImagesSearchList[7].length() - 1));
+			int numberOfImagesRemaining = this.numberOfImagesTotal;
+			int currentImagesFound = Integer.parseInt(numberOfImagesSearchList[5]);
+
 		} catch (IOException e) {
 			System.out.println(e);
 		}
@@ -35,8 +47,8 @@ public class Scraper {
 		String numberOfImagesSearch = doc.getElementById("searching").text();
 		String[] numberOfImagesSearchList = numberOfImagesSearch.split(" ");
 
-		int numberOfImagesTotal = Integer.parseInt(numberOfImagesSearchList[7].substring(0, numberOfImagesSearchList[7].length() - 1));
-		int numberOfImagesRemaining = numberOfImagesTotal;
+		this.numberOfImagesTotal = Integer.parseInt(numberOfImagesSearchList[7].substring(0, numberOfImagesSearchList[7].length() - 1));
+		int numberOfImagesRemaining = this.numberOfImagesTotal;
 		int currentImagesFound = Integer.parseInt(numberOfImagesSearchList[5]);
 		int imagesFound = 0;
 		int imageId = 0;	
@@ -95,6 +107,10 @@ public class Scraper {
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	public int getTotalImages() {
+		return this.numberOfImagesTotal;
 	}
 
 }
