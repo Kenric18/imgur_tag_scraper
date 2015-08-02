@@ -15,7 +15,7 @@ public class Scraper {
 	private Document doc;
 	private Elements list;
 	private int numberOfImagesTotal;
-	private boolean running;
+	private static volatile boolean running = true;
 
 
 	public Scraper(String tag) {
@@ -24,7 +24,6 @@ public class Scraper {
 		this.tag = tag;
 		this.root = "http://imgur.com/search/score/all/page/1?scrolled&q=";
 		this.numberOfImagesTotal = 0;
-		this.running = true;
 
 		try {
 			this.doc = Jsoup.connect(root + tag).get(); 
@@ -62,21 +61,30 @@ public class Scraper {
 
 
 		while (!(currentImagesFound == numberOfImagesTotal) && this.running) {
+
 			System.out.print("Downloading page ");
+
 			System.out.println(pageCount);
-	
+
+			System.out.println(this.running);
+
+			
 			for (Element e : list) {
 
-				String url = "http://" + e.attr("src").substring(2, e.attr("src").length() - 5) + ".jpg";
+				if (this.running) {
 
-				System.out.println("Downloading image " + url);
+					String url = "http://" + e.attr("src").substring(2, e.attr("src").length() - 5) + ".jpg";
 
-				System.out.println(System.getProperty("user.dir"));
+					System.out.println("Downloading image " + url);
 
-				fileDownloader(url, Integer.toString(imageId));
+					System.out.println(System.getProperty("user.dir"));
 
-				imageId++;
-				imagesFound++;
+					fileDownloader(url, Integer.toString(imageId));
+
+					imageId++;
+					imagesFound++;
+					
+				}
 			}
 
 			this.root = "http://imgur.com/search/score/all/page/" + Integer.toString(++pageCount) + "?scrolled&q=";
@@ -116,7 +124,9 @@ public class Scraper {
 	}
 
 	public void setRunningMode(boolean b) {
+
 		this.running = b;
+
 	}
 
 }

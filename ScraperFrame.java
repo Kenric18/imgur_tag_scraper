@@ -18,11 +18,15 @@ public class ScraperFrame extends JFrame implements ActionListener {
 
 
 	public ScraperFrame() {
+
+		// this. keyword add
+
 		super("imgur scraper class");
 
 		searchArea = new JPanel(new GridLayout(2, 1));
 		downloadButton = new JButton("Download");
 		stopDownload = new JButton("Stop");
+
 
 		searchArea.add(downloadButton);
 		searchArea.add(stopDownload);
@@ -53,7 +57,7 @@ public class ScraperFrame extends JFrame implements ActionListener {
 			Thread scraperClass = new Thread(new Runnable(){
 
 				public void run() {
-
+					
 					System.out.println("Download started");
 					scraperTool.startDownload();
 
@@ -62,14 +66,15 @@ public class ScraperFrame extends JFrame implements ActionListener {
 
 		} else if (e.getSource() == stopDownload) {
 
-			System.out.println("download has stopped");
 			scraperTool.setRunningMode(false);
-
+			System.out.println("download has stopped");
 
 
 		}
 		
 	}
+
+
 
 }
 
