@@ -15,6 +15,7 @@ public class Scraper {
 	private Document doc;
 	private Elements list;
 	private int numberOfImagesTotal;
+	private boolean running;
 
 
 	public Scraper(String tag) {
@@ -23,6 +24,7 @@ public class Scraper {
 		this.tag = tag;
 		this.root = "http://imgur.com/search/score/all/page/1?scrolled&q=";
 		this.numberOfImagesTotal = 0;
+		this.running = true;
 
 		try {
 			this.doc = Jsoup.connect(root + tag).get(); 
@@ -42,7 +44,7 @@ public class Scraper {
 	}	
 
 
-	public void getList() {
+	public void startDownload() {
 
 		String numberOfImagesSearch = doc.getElementById("searching").text();
 		String[] numberOfImagesSearchList = numberOfImagesSearch.split(" ");
@@ -59,7 +61,7 @@ public class Scraper {
 		dir.mkdir();
 
 
-		while (!(currentImagesFound == numberOfImagesTotal)) {
+		while (!(currentImagesFound == numberOfImagesTotal) && this.running) {
 			System.out.print("Downloading page ");
 			System.out.println(pageCount);
 	
@@ -111,6 +113,10 @@ public class Scraper {
 
 	public int getTotalImages() {
 		return this.numberOfImagesTotal;
+	}
+
+	public void setRunningMode(boolean b) {
+		this.running = b;
 	}
 
 }
