@@ -7,6 +7,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 
+/**
+*
+* ScrapeFrame creates a GUI
+* using swing to take input from
+* the user and send to Scraper class
+*
+* @author ShaunGeorge
+*/
+
+
 public class ScraperFrame extends JFrame implements ActionListener {
 
 	private BorderLayout layout;
@@ -14,9 +24,11 @@ public class ScraperFrame extends JFrame implements ActionListener {
 	private JButton downloadButton;
 	private JButton stopDownload;
 
-
-
-
+	/**
+	* The default constructor which
+	* is used to initalize a window.
+	* 
+	*/
 	public ScraperFrame() {
 
 		// this. keyword add
@@ -48,6 +60,13 @@ public class ScraperFrame extends JFrame implements ActionListener {
 
 	}
 
+	/**
+	* When JButton is triggered
+	* the events are handled in this method
+	* Input from the JTextField are sent to the Scraper class
+	* after a new Thread is created.
+	* @param e is the event that was triggered.
+	*/
 	public void actionPerformed(ActionEvent e) {
 
 		Scraper scraperTool = new Scraper("cat");
