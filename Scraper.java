@@ -8,6 +8,13 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
+/**
+* Takes query from user and
+* crawls imgur for related images and then
+* downloads the images into a folder.
+* @author ShaunGeorge
+*/
+
 
 public class Scraper {
 	private String tag;
@@ -18,6 +25,14 @@ public class Scraper {
 	private static volatile boolean running = true;
 
 
+
+	/**
+	* Constructor which does basic crawling
+	* and retrieves basic information such as
+	* total number of images found.
+	*
+	* @param tag Is the search query provided by the user.
+	*/
 	public Scraper(String tag) {
 
 
@@ -42,6 +57,11 @@ public class Scraper {
 
 	}	
 
+	/*
+	* This method iterates through the search result
+	* pages and parses it for image urls. It also creates a folder
+	* for the images.
+	*/
 
 	public void startDownload() {
 
@@ -108,6 +128,13 @@ public class Scraper {
 
 	}
 
+	/**
+	* This method recieves the image url from startDownload
+	* and then downloads the images to the folder created earlier.
+	*
+	* @param url_id is the image url.
+	* @param imageId is what the image name is going to be when stored.
+	*/
 	private void fileDownloader(String url_id, String imageId) {
 		try {
 			URL url = new URL(url_id);
