@@ -48,8 +48,6 @@ public class Scraper {
 			String[] numberOfImagesSearchList = numberOfImagesSearch.split(" ");
 
 			this.numberOfImagesTotal = Integer.parseInt(numberOfImagesSearchList[7].substring(0, numberOfImagesSearchList[7].length() - 1));
-			int numberOfImagesRemaining = this.numberOfImagesTotal;
-			int currentImagesFound = Integer.parseInt(numberOfImagesSearchList[5]);
 
 		} catch (IOException e) {
 			System.out.println(e);
@@ -146,14 +144,19 @@ public class Scraper {
 		}
 	}
 
-	public int getTotalImages() {
-		return this.numberOfImagesTotal;
+	/**
+	* Returns total images found related to query.
+	* @return number of images found.
+	*/
+	public String getTotalImages() {
+		return Integer.toString(numberOfImagesTotal);
 	}
 
+	/**
+	* Used to stop the crawler before it finishes.
+	*/
 	public void setRunningMode(boolean b) {
-
 		this.running = b;
-
 	}
 
 }

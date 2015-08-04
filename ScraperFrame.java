@@ -1,8 +1,10 @@
 import javax.swing.JFrame;
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.JLabel;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -23,6 +25,9 @@ public class ScraperFrame extends JFrame implements ActionListener {
 	private JPanel searchArea;
 	private JButton downloadButton;
 	private JButton stopDownload;
+	private JPanel queryInfo;
+	private JTextField searchQuery;
+	private JLabel numberOfImages;
 
 	/**
 	* The default constructor which
@@ -35,18 +40,25 @@ public class ScraperFrame extends JFrame implements ActionListener {
 
 		super("imgur scraper class");
 
+		setLayout(new BorderLayout());
+
 		searchArea = new JPanel(new GridLayout(2, 1));
+		queryInfo = new JPanel(new GridLayout(2, 2));
+
 		downloadButton = new JButton("Download");
 		stopDownload = new JButton("Stop");
+		searchQuery = new JTextField();
 
 
 		searchArea.add(downloadButton);
 		searchArea.add(stopDownload);
+		queryInfo.add(searchQuery);
 
 		downloadButton.addActionListener(this);
 		stopDownload.addActionListener(this);
 
 		this.add(searchArea, BorderLayout.EAST);
+		this.add(queryInfo, BorderLayout.CENTER);
 
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setSize(500, 100);
@@ -69,12 +81,17 @@ public class ScraperFrame extends JFrame implements ActionListener {
 	*/
 	public void actionPerformed(ActionEvent e) {
 
-		Scraper scraperTool = new Scraper("cat");
+		final Scraper scraperTool = new Scraper(searchQuery.getText());
 
 		if (e.getSource() == downloadButton) {
 
-			Thread scraperClass = new Thread(new Runnable(){
+			numberOfImages = new JLabel(scraperTool.getTotalImages() + " related images found.");
+			
+			queryInfo.add(numberOfImages);
+			queryInfo.revalidate();
+			queryInfo.repaint();
 
+			Thread scraperClass = new Thread(new Runnable(){
 				public void run() {
 					
 					System.out.println("Download started");
@@ -86,6 +103,16 @@ public class ScraperFrame extends JFrame implements ActionListener {
 		} else if (e.getSource() == stopDownload) {
 
 			scraperTool.setRunningMode(false);
+
+
+			for (int i = 0; i < queryInfo.getComponents().length; i++) {
+				System.out.println(queryInfo.getComponents()[i]);
+			}
+
+			queryInfo.remove(numberOfImages);
+			queryInfo.revalidate();
+			queryInfo.repaint();
+
 			System.out.println("download has stopped");
 
 
