@@ -7,7 +7,8 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-
+import java.lang.StringBuffer;
+import java.lang.Character;
 
 /**
 *
@@ -83,7 +84,7 @@ public class ScraperFrame extends JFrame implements ActionListener {
 		
 		if (searchQuery.getText().length() > 0) {
 			
-			Scraper scraperTool = new Scraper(searchQuery.getText());
+			Scraper scraperTool = new Scraper(normalizeText(searchQuery.getText()));
 			
 			if (e.getSource() == downloadButton) {
 				
@@ -106,11 +107,6 @@ public class ScraperFrame extends JFrame implements ActionListener {
 
 				scraperTool.setRunningMode(false);
 
-
-				for (int i = 0; i < queryInfo.getComponents().length; i++) {
-					System.out.println(queryInfo.getComponents()[i]);
-				}
-
 				queryInfo.remove(numberOfImages);
 				queryInfo.revalidate();
 				queryInfo.repaint();
@@ -128,6 +124,19 @@ public class ScraperFrame extends JFrame implements ActionListener {
 		}
 		
 		
+	}
+	
+	private String normalizeText(String input) {
+		
+		StringBuffer normalized_text = new StringBuffer();
+		
+		for (int i = 0; i < input.length(); i++) {
+			if (Character.isLetter(input.charAt(i)) || (Character.isDigit(input.charAt(i))) || Character.isWhitespace(input.charAt(i))) {
+				normalized_text.append(input.charAt(i));
+			}
+		}		
+		
+		return normalized_text.toString();
 	}
 
 

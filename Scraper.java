@@ -77,16 +77,8 @@ public class Scraper {
 
 		File dir = new File(System.getProperty("user.dir") + "/" + tag);
 		dir.mkdir();
-
-
+		
 		while (!(currentImagesFound == numberOfImagesTotal) && Scraper.running) {
-
-			System.out.print("Downloading page ");
-
-			System.out.println(pageCount);
-
-			System.out.println(Scraper.running);
-
 			
 			for (Element e : list) {
 
@@ -95,8 +87,6 @@ public class Scraper {
 					String url = "http://" + e.attr("src").substring(2, e.attr("src").length() - 5) + ".jpg";
 
 					System.out.println("Downloading image " + url);
-
-					System.out.println(System.getProperty("user.dir"));
 
 					fileDownloader(url, Integer.toString(imageId));
 
