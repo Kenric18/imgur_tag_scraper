@@ -46,7 +46,8 @@ public class Scraper {
 
 			String numberOfImagesSearch = doc.getElementById("searching").text();
 			String[] numberOfImagesSearchList = numberOfImagesSearch.split(" ");
-
+			
+			
 			this.numberOfImagesTotal = Integer.parseInt(numberOfImagesSearchList[7].substring(0, numberOfImagesSearchList[7].length() - 1));
 
 		} catch (IOException e) {
@@ -78,18 +79,18 @@ public class Scraper {
 		dir.mkdir();
 
 
-		while (!(currentImagesFound == numberOfImagesTotal) && this.running) {
+		while (!(currentImagesFound == numberOfImagesTotal) && Scraper.running) {
 
 			System.out.print("Downloading page ");
 
 			System.out.println(pageCount);
 
-			System.out.println(this.running);
+			System.out.println(Scraper.running);
 
 			
 			for (Element e : list) {
 
-				if (this.running) {
+				if (Scraper.running) {
 
 					String url = "http://" + e.attr("src").substring(2, e.attr("src").length() - 5) + ".jpg";
 
@@ -137,7 +138,7 @@ public class Scraper {
 		try {
 			URL url = new URL(url_id);
 			BufferedImage image = ImageIO.read(url);
-	        ImageIO.write(image, "jpg",new File(System.getProperty("user.dir") + "/" + tag + "/image" + imageId));
+	        ImageIO.write(image, "jpg", new File(System.getProperty("user.dir") + "/" + tag + "/image" + imageId + ".jpg"));
 
 		} catch (IOException ex) {
 			ex.printStackTrace();
@@ -156,7 +157,7 @@ public class Scraper {
 	* Used to stop the crawler before it finishes.
 	*/
 	public void setRunningMode(boolean b) {
-		this.running = b;
+		Scraper.running = b;
 	}
 
 }

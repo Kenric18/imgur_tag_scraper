@@ -21,7 +21,6 @@ import java.awt.event.ActionEvent;
 
 public class ScraperFrame extends JFrame implements ActionListener {
 
-	private BorderLayout layout;
 	private JPanel searchArea;
 	private JButton downloadButton;
 	private JButton stopDownload;
@@ -69,6 +68,7 @@ public class ScraperFrame extends JFrame implements ActionListener {
 
 	public static void main(String[] args) {
 		ScraperFrame window = new ScraperFrame();
+		window.setVisible(true);
 
 	}
 
@@ -80,43 +80,53 @@ public class ScraperFrame extends JFrame implements ActionListener {
 	* @param e is the event that was triggered.
 	*/
 	public void actionPerformed(ActionEvent e) {
-
-		final Scraper scraperTool = new Scraper(searchQuery.getText());
-
-		if (e.getSource() == downloadButton) {
-
-			numberOfImages = new JLabel(scraperTool.getTotalImages() + " related images found.");
+		
+		if (searchQuery.getText().length() > 0) {
 			
-			queryInfo.add(numberOfImages);
-			queryInfo.revalidate();
-			queryInfo.repaint();
+			Scraper scraperTool = new Scraper(searchQuery.getText());
+			
+			if (e.getSource() == downloadButton) {
+				
+				numberOfImages = new JLabel(scraperTool.getTotalImages() + " related images found.");
+				
+				queryInfo.add(numberOfImages);
+				queryInfo.revalidate();
+				queryInfo.repaint();
 
-			Thread scraperClass = new Thread(new Runnable(){
-				public void run() {
-					
-					System.out.println("Download started");
-					scraperTool.startDownload();
+				Thread scraperClass = new Thread(new Runnable(){
+					public void run() {
+						
+						System.out.println("Download started");
+						scraperTool.startDownload();
 
-				}});
-			scraperClass.start();
+					}});
+				scraperClass.start();
 
-		} else if (e.getSource() == stopDownload) {
+			} else if (e.getSource() == stopDownload) {
 
-			scraperTool.setRunningMode(false);
+				scraperTool.setRunningMode(false);
 
 
-			for (int i = 0; i < queryInfo.getComponents().length; i++) {
-				System.out.println(queryInfo.getComponents()[i]);
+				for (int i = 0; i < queryInfo.getComponents().length; i++) {
+					System.out.println(queryInfo.getComponents()[i]);
+				}
+
+				queryInfo.remove(numberOfImages);
+				queryInfo.revalidate();
+				queryInfo.repaint();
+
+				System.out.println("download has stopped");
+
+
 			}
-
-			queryInfo.remove(numberOfImages);
+			
+		} else {
+			JLabel emptyInvalidQuery = new JLabel("No query entered");
+			queryInfo.add(emptyInvalidQuery);
 			queryInfo.revalidate();
 			queryInfo.repaint();
-
-			System.out.println("download has stopped");
-
-
 		}
+		
 		
 	}
 
