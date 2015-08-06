@@ -26,6 +26,7 @@ public class Scraper {
     private String lastUrl;
     private int currentImagesFound;
     private int numberOfImagesRemaining;
+    private int pageCount;
 
 
 
@@ -44,6 +45,7 @@ public class Scraper {
         this.numberOfImagesTotal = 0;
         this.lastUrl = null;
         this.currentImagesFound = 0;
+        this.pageCount = 1;
 
         try {
             this.doc = Jsoup.connect(root + tag).get(); 
@@ -68,17 +70,17 @@ public class Scraper {
     */
 
     public void startDownload() {
+    	
+    	System.out.println("PAGE COUNT IS " + Integer.toString(pageCount));
 
         String numberOfImagesSearch = doc.getElementById("searching").text();
         String[] numberOfImagesSearchList = numberOfImagesSearch.split(" ");
 
-        this.numberOfImagesTotal = Integer.parseInt(numberOfImagesSearchList[7].substring(0, numberOfImagesSearchList[7].length() - 1));
-        int numberOfImagesRemaining = this.numberOfImagesTotal;
-        int currentImagesFound = Integer.parseInt(numberOfImagesSearchList[5]);
+        numberOfImagesRemaining = this.numberOfImagesTotal;
+        currentImagesFound = Integer.parseInt(numberOfImagesSearchList[5]);
+        
         int imagesFound = 0;
-        int imageId = 0;    
-
-        int pageCount = 1;    
+        int imageId = 0;       
 
         File dir = new File(System.getProperty("user.dir") + "/" + tag);
         dir.mkdir();
@@ -94,6 +96,9 @@ public class Scraper {
                 	
 
                     System.out.println("Downloading image " + lastUrl);
+                    System.out.println(pageCount);
+                    
+                    System.out.println(imageId);
 
                     fileDownloader(lastUrl, Integer.toString(imageId));
 
@@ -102,9 +107,12 @@ public class Scraper {
                     
                 }
             }
+            
+            if (Scraper.running) {
+                this.root = "http://imgur.com/search/score/all/page/" + Integer.toString(++pageCount) + "?scrolled&q=";
+            }
 
-            this.root = "http://imgur.com/search/score/all/page/" + Integer.toString(++pageCount) + "?scrolled&q=";
-
+            
             try {
                 this.doc = Jsoup.connect(root + tag).get();
                 this.list = doc.select(".image-list-link img[src$=.jpg]");

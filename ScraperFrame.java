@@ -28,6 +28,8 @@ public class ScraperFrame extends JFrame implements ActionListener {
     private JPanel queryInfo;
     private JTextField searchQuery;
     private JLabel numberOfImages;
+    private String lastSearch;
+    private Scraper scraperTool;
 
     /**
     * The default constructor which
@@ -48,6 +50,8 @@ public class ScraperFrame extends JFrame implements ActionListener {
         downloadButton = new JButton("Download");
         stopDownload = new JButton("Stop");
         searchQuery = new JTextField();
+        scraperTool = null;
+        lastSearch = null;
 
 
         searchArea.add(downloadButton);
@@ -83,13 +87,21 @@ public class ScraperFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         
         if (searchQuery.getText().length() > 0 && searchQuery.getText() != " ") {
-            
-            System.out.println(searchQuery.getText() == " ");
-            
-            Scraper scraperTool = new Scraper(normalizeText(searchQuery.getText()));
+                    	            
+            if (!searchQuery.getText().equals(lastSearch)) {     	
+            	
+            	lastSearch = searchQuery.getText();
+                scraperTool = new Scraper(normalizeText(searchQuery.getText()));
+                               
+                System.out.println("search query is not same as last search");
+            } else {
+            	System.out.println("search query is the same as last search");
+            }
             
             if (e.getSource() == downloadButton) {
                 
+            	scraperTool.setRunningMode(true);
+            	
                 numberOfImages = new JLabel(scraperTool.getTotalImages() + " related images found.");
                 
                 queryInfo.add(numberOfImages);
@@ -98,7 +110,7 @@ public class ScraperFrame extends JFrame implements ActionListener {
 
                 Thread scraperClass = new Thread(new Runnable(){
                     public void run() {
-                        
+                    
                         System.out.println("Download started");
                         scraperTool.startDownload();
 
@@ -114,16 +126,16 @@ public class ScraperFrame extends JFrame implements ActionListener {
                 queryInfo.repaint();
 
                 System.out.println("download has stopped");
-
-
             }
             
         } else {
+  
             JLabel emptyInvalidQuery = new JLabel("No query entered");
             queryInfo.add(emptyInvalidQuery);
             queryInfo.revalidate();
             queryInfo.repaint();
         }
+        
         
         
     }
